@@ -9,3 +9,12 @@
     display: grid;
     place-items: center;
 }
+.gameOver{
+    position: fixed;
+    top: 150px;
+    left: 300px;
+    display: none;
+}
+.gameOver img{
+    width: 800px;
+}
