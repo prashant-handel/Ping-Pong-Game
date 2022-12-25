@@ -14,6 +14,12 @@ let lastPaintTime = 0;
 let speed = 100;
 let isPaused = false;
 let gameOverEl = document.querySelector(".gameOver");
+player1 = document.querySelector(".player1");
+player2 = document.querySelector(".player2");
+let up = false;
+let down = false;
+let w = false;
+let s = false;
 
 // Game Function
 function main(ctime) {
@@ -80,7 +86,7 @@ const ball = {
   radius: 10,
   velocityX: 5,
   velocityY: 5,
-  color: "white",
+  color: "white"
 };
 
 // Players Score display
@@ -126,17 +132,15 @@ function update() {
   }
   paddleStrike();
 }
-
-// Moving paddles
-function control(e) {
+function keyPressed(e) {
   if (e.keyCode === 38) {
-    if (user2.y > 0) user2.y -= 35;
+    up = true;
   } else if (e.keyCode === 40) {
-    if (user2.y + paddleHeight < height) user2.y += 35;
+    down = true;
   } else if (e.keyCode === 87) {
-    if (user1.y > 0) user1.y -= 35;
+    w = true;
   } else if (e.keyCode === 83) {
-    if (user1.y + paddleHeight < height) user1.y += 35;
+    s = true;
   } else if (e.keyCode === 32) {
     if (isPaused) {
       isPaused = false;
@@ -145,7 +149,55 @@ function control(e) {
       isPaused = true;
     }
   }
+  control();
 }
+
+function control(){
+  if (up == true) {
+    if (user2.y > 0) user2.y -= 35;
+  }
+  if (down == true) {
+    if (user2.y + paddleHeight < height) user2.y += 35;
+  }
+  if (w == true) {
+    if (user1.y > 0) user1.y -= 35;
+  }
+  if (s == true) {
+    if (user1.y + paddleHeight < height) user1.y += 35;
+  }
+}
+
+function keyUp(e){
+  if (e.keyCode === 38) {
+    up = false;
+  } else if (e.keyCode === 40) {
+    down = false;
+  } else if (e.keyCode === 87) {
+    w = false;
+  } else if (e.keyCode === 83) {
+    s = false;
+  }
+}
+  
+// Moving paddles
+// function control(e) {
+//   if (e.keyCode === 38) {
+//     if (user2.y > 0) user2.y -= 35;
+//   } else if (e.keyCode === 40) {
+//     if (user2.y + paddleHeight < height) user2.y += 35;
+//   } else if (e.keyCode === 87) {
+//     if (user1.y > 0) user1.y -= 35;
+//   } else if (e.keyCode === 83) {
+//     if (user1.y + paddleHeight < height) user1.y += 35;
+//   } else if (e.keyCode === 32) {
+//     if (isPaused) {
+//       isPaused = false;
+//       window.requestAnimationFrame(main);
+//     } else {
+//       isPaused = true;
+//     }
+//   }
+// }
 
 // Striking on paddle function
 function paddleStrike() {
@@ -164,10 +216,10 @@ function paddleStrike() {
   }
 }
 
-function reset(){
-    ball.x = width / 2;
-    ball.y = height / 2;
-    ball.velocityX = -ball.velocityX;
+function reset() {
+  ball.x = width / 2;
+  ball.y = height / 2;
+  ball.velocityX = -ball.velocityX;
 }
 
 function pointsUpdate() {
@@ -184,19 +236,22 @@ function pointsUpdate() {
 function gameOver() {
   if (user1.score == 5) {
     isPaused = true;
+    player1.style.display = "block";
     gameOverEl.style.display = "block";
   } else if (user2.score == 5) {
     isPaused = true;
+    player2.style.display = "block";
     gameOverEl.style.display = "block";
   }
 }
 
 // Starting the game
 function start() {
+  window.addEventListener("keydown", keyPressed);
+  window.addEventListener("keyup", keyUp);
   update();
   render();
   // Adding keyboard events for controls
-  window.addEventListener("keydown", control);
   pointsUpdate();
   gameOver();
 }
